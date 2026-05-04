@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Dashboard</title>
+	<link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="page-shell">
+<main class="layout">
+	<section class="panel dashboard-hero">
+		<div>
+			<div class="eyebrow">Dashboard protegido</div>
+			<h1 id="dashboard-welcome" data-testid="dashboard-welcome" th:text="'Hola, ' + ${user.fullName} + '.'">Hola, usuario.</h1>
+			<p class="hero-copy">
+				Este espacio ahora tiene formularios reales de perfil y experiencia laboral para que practiques validaciones,
+				altas, cambios, eliminaciones y recorridos completos con Selenium.
+			</p>
+		</div>
+
+		<form th:action="@{/logout}" method="post">
+			<button class="btn btn-secondary" id="logout-button" data-testid="logout-button" type="submit">Cerrar sesion</button>
+		</form>
+	</section>
+
+	<section class="alert-stack">
+		<div class="alert alert-success" id="profile-updated-alert" data-testid="profile-updated-alert" th:if="${param.profileUpdated}">
+			La informacion del perfil fue actualizada correctamente.
+		</div>
+		<div class="alert alert-success" id="experience-added-alert" data-testid="experience-added-alert" th:if="${param.experienceAdded}">
+			La experiencia laboral fue agregada correctamente.
+		</div>
+		<div class="alert alert-info" id="experience-deleted-alert" data-testid="experience-deleted-alert" th:if="${param.experienceDeleted}">
+			La experiencia laboral fue eliminada.
+		</div>
+	</section>
+
+	<section class="grid four-columns">
+		<article class="panel stat-card" data-testid="dashboard-email">
+			<h2>Correo</h2>
+			<p th:text="${user.email}">correo@demo.com</p>
+		</article>
+		<article class="panel stat-card" data-testid="dashboard-role">
+			<h2>Rol</h2>
+			<p th:text="${user.role}">USER</p>
+		</article>
+		<article class="panel stat-card" data-testid="dashboard-created-at">
+			<h2>Registrado desde</h2>
+			<p th:text="${memberSince}">01/01/2026 12:00</p>
+		</article>
+		<article class="panel stat-card" data-testid="dashboard-profile-completion">
+			<h2>Perfil completo</h2>
+			<p th:text="${profileCompletion} + '%'">80%</p>
+		</article>
+	</section>
+
+	<section class="grid two-columns">
+		<article class="panel">
+			<div class="section-header">
+				<div>
+					<h2>Actualizar informacion</h2>
+					<p class="muted">Edita datos de perfil para probar formularios, mensajes y persistencia.</p>
+				</div>
+			</div>
+
+			<form id="profile-form" data-testid="profile-form" class="stack-form" th:action="@{/dashboard/profile}" th:object="${profileForm}" method="post" novalidate>
+				<div class="form-grid two-fields">
+					<div class="field">
+						<label for="profileFullName">Nombre completo</label>
+						<input id="profileFullName" data-testid="profile-full-name" type="text" th:field="*{fullName}" placeholder="Ejemplo: Maria Gomez">
+						<p class="field-error" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></p>
+					</div>
+
+					<div class="field">
+						<label for="professionalTitle">Cargo profesional</label>
+						<input id="professionalTitle" data-testid="profile-title" type="text" th:field="*{professionalTitle}" placeholder="Ejemplo: QA Analyst">
+						<p class="field-error" th:if="${#fields.hasErrors('professionalTitle')}" th:errors="*{professionalTitle}"></p>
+					</div>
+				</div>
+
+				<div class="form-grid two-fields">
+					<div class="field">
+						<label for="phoneNumber">Telefono</label>
+						<input id="phoneNumber" data-testid="profile-phone" type="text" th:field="*{phoneNumber}" placeholder="+57 300 000 0000">
+						<p class="field-error" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></p>
+					</div>
+
+					<div class="field">
+						<label for="profileLocation">Ubicacion</label>
+						<input id="profileLocation" data-testid="profile-location" type="text" th:field="*{location}" placeholder="Bogota, Colombia">
+						<p class="field-error" th:if="${#fields.hasErrors('location')}" th:errors="*{location}"></p>
+					</div>
+				</div>
+
+				<div class="field">
+					<label for="bio">Resumen profesional</label>
+					<textarea id="bio" data-testid="profile-bio" th:field="*{bio}" rows="5" placeholder="Cuenta un poco de tu experiencia, herramientas o metas."></textarea>
+					<p class="field-error" th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}"></p>
+				</div>
+
+				<button class="btn btn-primary" id="profile-submit" data-testid="profile-submit" type="submit">Guardar cambios</button>
+			</form>
+		</article>
+
+		<article class="panel">
+			<div class="section-header">
+				<div>
+					<h2>Agregar experiencia laboral</h2>
+					<p class="muted">Crea un nuevo registro para practicar altas y validaciones del dashboard.</p>
+				</div>
+				<span class="pill" data-testid="dashboard-experiences-count" th:text="${experiencesCount} + ' registros'">0 registros</span>
+			</div>
+
+			<form id="experience-form" data-testid="experience-form" class="stack-form" th:action="@{/dashboard/experiences}" th:object="${experienceForm}" method="post" novalidate>
+				<div class="form-grid two-fields">
+					<div class="field">
+						<label for="jobTitle">Cargo</label>
+						<input id="jobTitle" data-testid="experience-job-title" type="text" th:field="*{jobTitle}" placeholder="QA Engineer">
+						<p class="field-error" th:if="${#fields.hasErrors('jobTitle')}" th:errors="*{jobTitle}"></p>
+					</div>
+
+					<div class="field">
+						<label for="company">Empresa</label>
+						<input id="company" data-testid="experience-company" type="text" th:field="*{company}" placeholder="Mi empresa">
+						<p class="field-error" th:if="${#fields.hasErrors('company')}" th:errors="*{company}"></p>
+					</div>
+				</div>
+
+				<div class="form-grid two-fields">
+					<div class="field">
+						<label for="employmentType">Tipo de empleo</label>
+						<input id="employmentType" data-testid="experience-employment-type" type="text" th:field="*{employmentType}" placeholder="Tiempo completo">
+						<p class="field-error" th:if="${#fields.hasErrors('employmentType')}" th:errors="*{employmentType}"></p>
+					</div>
+
+					<div class="field">
+						<label for="experienceLocation">Ubicacion</label>
+						<input id="experienceLocation" data-testid="experience-location" type="text" th:field="*{location}" placeholder="Remoto / Ciudad">
+						<p class="field-error" th:if="${#fields.hasErrors('location')}" th:errors="*{location}"></p>
+					</div>
+				</div>
+
+				<div class="form-grid two-fields">
+					<div class="field">
+						<label for="startDate">Fecha de inicio</label>
+						<input id="startDate" data-testid="experience-start-date" type="date" th:field="*{startDate}">
+						<p class="field-error" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></p>
+					</div>
+
+					<div class="field">
+						<label for="endDate">Fecha final</label>
+						<input id="endDate" data-testid="experience-end-date" type="date" th:field="*{endDate}">
+						<p class="field-error" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></p>
+						<p class="field-error" th:if="${#fields.hasErrors('dateRangeValid')}" th:errors="*{dateRangeValid}"></p>
+					</div>
+				</div>
+
+				<label class="checkbox-field" for="currentPosition">
+					<input id="currentPosition" data-testid="experience-current-position" type="checkbox" th:field="*{currentPosition}">
+					<span>Actualmente trabajo aqui</span>
+				</label>
+
+				<div class="field">
+					<label for="description">Responsabilidades o logros</label>
+					<textarea id="description" data-testid="experience-description" th:field="*{description}" rows="5" placeholder="Ejemplo: automatizacion de smoke tests, reporte de bugs, regresion funcional."></textarea>
+					<p class="field-error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+				</div>
+
+				<button class="btn btn-primary" id="experience-submit" data-testid="experience-submit" type="submit">Agregar experiencia</button>
+			</form>
+		</article>
+	</section>
+
+	<section class="panel">
+		<div class="section-header">
+			<div>
+				<h2>Experiencias registradas</h2>
+				<p class="muted">Cada card te sirve para automatizar lecturas, validaciones y acciones como eliminar.</p>
+			</div>
+		</div>
+
+		<div class="empty-state" data-testid="empty-experiences" th:if="${#lists.isEmpty(experiences)}">
+			Aun no has agregado experiencias. Usa el formulario para crear la primera.
+		</div>
+
+		<div class="experience-list" th:unless="${#lists.isEmpty(experiences)}">
+			<article class="experience-card" th:each="experience : ${experiences}" th:attr="data-testid=${'experience-card-' + experience.id}">
+				<div class="experience-header">
+					<div>
+						<h3 th:text="${experience.jobTitle}">QA Analyst</h3>
+						<p class="experience-company" th:text="${experience.company}">Empresa</p>
+					</div>
+					<span class="pill" th:if="${experience.currentPosition}" th:text="'Actual'">Actual</span>
+				</div>
+
+				<div class="experience-meta">
+					<span th:text="${experience.employmentType != null ? experience.employmentType : 'Tipo no especificado'}">Tiempo completo</span>
+					<span th:text="${experience.location != null ? experience.location : 'Ubicacion no especificada'}">Bogota</span>
+					<span th:text="${experience.startDate + ' - ' + (experience.endDate != null ? experience.endDate : 'Actual')}">2025-01-01 - Actual</span>
+				</div>
+
+				<p class="experience-description" th:text="${experience.description != null ? experience.description : 'Sin descripcion adicional.'}">
+					Descripcion
+				</p>
+
+				<form th:action="@{/dashboard/experiences/{experienceId}/delete(experienceId=${experience.id})}" method="post">
+					<button class="btn btn-secondary btn-small" type="submit" th:attr="data-testid=${'experience-delete-' + experience.id}">
+						Eliminar
+					</button>
+				</form>
+			</article>
+		</div>
+	</section>
+
+	<section class="grid two-columns">
+		<article class="panel">
+			<h2>Escenarios nuevos para probar</h2>
+			<ul class="checklist">
+				<li>Actualizar el perfil con datos largos, vacios y combinaciones validas.</li>
+				<li>Agregar experiencia con fecha final anterior a la inicial.</li>
+				<li>Agregar experiencia marcada como actual y sin fecha final.</li>
+				<li>Eliminar una experiencia y validar que desaparece del listado.</li>
+				<li>Comprobar persistencia cerrando sesion y volviendo a entrar.</li>
+			</ul>
+		</article>
+
+		<article class="panel">
+			<h2>Estado de sesion</h2>
+			<p><strong>Momento actual:</strong> <span th:text="${currentMoment}">01/01/2026 12:30</span></p>
+			<p><strong>Cargo actual:</strong> <span th:text="${user.professionalTitle != null ? user.professionalTitle : 'Sin definir'}">QA Analyst</span></p>
+			<p><strong>H2 Console:</strong> <a href="/h2-console" target="_blank" rel="noreferrer">Abrir base de datos</a></p>
+			<p><strong>JDBC URL:</strong> <code>jdbc:h2:file:./data/qa-practice-db</code></p>
+			<p><strong>Usuario:</strong> <code>sa</code></p>
+			<p><strong>Password:</strong> <code>password</code></p>
+		</article>
+	</section>
+</main>
+</body>
+</html>

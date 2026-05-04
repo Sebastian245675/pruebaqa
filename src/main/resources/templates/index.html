@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>QA Practice Lab</title>
+	<link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="page-shell">
+<main class="layout">
+	<section class="hero panel">
+		<div class="eyebrow">Java + Spring Boot</div>
+		<h1>Aplicacion web para practicar QA con registro, login y dashboard</h1>
+		<p class="hero-copy">
+			Usa este proyecto como laboratorio para aprender pruebas manuales y automatizadas.
+			Tienes validaciones, rutas protegidas, sesiones, mensajes y usuarios demo.
+		</p>
+		<div class="hero-actions" sec:authorize="!isAuthenticated()">
+			<a class="btn btn-primary" id="go-register" data-testid="go-register" th:href="@{/register}">Crear cuenta</a>
+			<a class="btn btn-secondary" id="go-login" data-testid="go-login" th:href="@{/login}">Iniciar sesion</a>
+		</div>
+		<div class="hero-actions" sec:authorize="isAuthenticated()">
+			<a class="btn btn-primary" id="go-dashboard" data-testid="go-dashboard" th:href="@{/dashboard}">Ir al dashboard</a>
+		</div>
+	</section>
+
+	<section class="grid two-columns">
+		<article class="panel">
+			<h2>Credenciales demo</h2>
+			<div class="credential-card" data-testid="demo-admin">
+				<strong>Admin</strong>
+				<p>Correo: <code>qa.admin@testlab.local</code></p>
+				<p>Contrasena: <code>Admin123!</code></p>
+			</div>
+			<div class="credential-card" data-testid="demo-user">
+				<strong>Usuario</strong>
+				<p>Correo: <code>qa.user@testlab.local</code></p>
+				<p>Contrasena: <code>User123!</code></p>
+			</div>
+		</article>
+
+		<article class="panel">
+			<h2>Ideas para practicar QA</h2>
+			<ul class="checklist">
+				<li>Validar campos obligatorios y formato de correo.</li>
+				<li>Probar contrasenas diferentes en el registro.</li>
+				<li>Intentar acceder a <code>/dashboard</code> sin iniciar sesion.</li>
+				<li>Verificar mensajes de exito, error y cierre de sesion.</li>
+				<li>Automatizar formularios usando los <code>id</code> y <code>data-testid</code>.</li>
+			</ul>
+		</article>
+	</section>
+</main>
+</body>
+</html>

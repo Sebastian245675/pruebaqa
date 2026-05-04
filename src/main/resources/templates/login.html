@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Login</title>
+	<link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="page-shell">
+<main class="layout">
+	<section class="form-panel panel">
+		<div class="eyebrow">Inicio de sesion</div>
+		<h1>Entra al laboratorio QA</h1>
+		<p class="muted">Puedes usar una cuenta demo o registrar una nueva.</p>
+
+		<div class="alert alert-success" id="registered-alert" data-testid="registered-alert" th:if="${param.registered}">
+			Registro exitoso. Ahora inicia sesion con tus credenciales.
+		</div>
+		<div class="alert alert-error" id="login-error-alert" data-testid="login-error-alert" th:if="${param.error}">
+			Correo o contrasena incorrectos.
+		</div>
+		<div class="alert alert-info" id="logout-alert" data-testid="logout-alert" th:if="${param.logout}">
+			Sesion cerrada correctamente.
+		</div>
+
+		<form id="login-form" data-testid="login-form" class="stack-form" th:action="@{/login}" method="post">
+			<div class="field">
+				<label for="email">Correo electronico</label>
+				<input id="email" data-testid="login-email" name="email" type="email" placeholder="qa.user@testlab.local" required>
+			</div>
+
+			<div class="field">
+				<label for="password">Contrasena</label>
+				<input id="password" data-testid="login-password" name="password" type="password" placeholder="Ingresa tu contrasena" required>
+			</div>
+
+			<button class="btn btn-primary" id="login-submit" data-testid="login-submit" type="submit">Entrar</button>
+		</form>
+
+		<div class="panel soft-panel compact-panel">
+			<h2>Usuario de prueba</h2>
+			<p><strong>Correo:</strong> <code>qa.user@testlab.local</code></p>
+			<p><strong>Contrasena:</strong> <code>User123!</code></p>
+		</div>
+
+		<p class="switch-link">No tienes cuenta. <a th:href="@{/register}">Registrate aqui</a></p>
+		<p class="switch-link"><a th:href="@{/}">Volver al inicio</a></p>
+	</section>
+</main>
+</body>
+</html>

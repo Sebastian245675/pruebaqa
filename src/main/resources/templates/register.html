@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Registro</title>
+	<link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="page-shell">
+<main class="layout">
+	<section class="form-panel panel">
+		<div class="eyebrow">Registro de usuario</div>
+		<h1>Crea una cuenta para tus pruebas</h1>
+		<p class="muted">El registro guarda usuarios en H2 para que puedas repetir escenarios funcionales.</p>
+
+		<form id="register-form" data-testid="register-form" class="stack-form" th:action="@{/register}" th:object="${registrationForm}" method="post" novalidate>
+			<div class="field">
+				<label for="fullName">Nombre completo</label>
+				<input id="fullName" data-testid="register-full-name" type="text" th:field="*{fullName}" placeholder="Ejemplo: Maria Gomez">
+				<p class="field-error" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></p>
+			</div>
+
+			<div class="field">
+				<label for="email">Correo electronico</label>
+				<input id="email" data-testid="register-email" type="email" th:field="*{email}" placeholder="maria@email.com">
+				<p class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+			</div>
+
+			<div class="field">
+				<label for="password">Contrasena</label>
+				<input id="password" data-testid="register-password" type="password" th:field="*{password}" placeholder="Minimo 6 caracteres">
+				<p class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+			</div>
+
+			<div class="field">
+				<label for="confirmPassword">Confirmar contrasena</label>
+				<input id="confirmPassword" data-testid="register-confirm-password" type="password" th:field="*{confirmPassword}" placeholder="Repite la contrasena">
+				<p class="field-error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></p>
+				<p class="field-error" th:if="${#fields.hasErrors('passwordConfirmationValid')}" th:errors="*{passwordConfirmationValid}"></p>
+			</div>
+
+			<button class="btn btn-primary" id="register-submit" data-testid="register-submit" type="submit">Registrarme</button>
+		</form>
+
+		<p class="switch-link">Ya tienes cuenta. <a th:href="@{/login}">Ir al login</a></p>
+		<p class="switch-link"><a th:href="@{/}">Volver al inicio</a></p>
+	</section>
+</main>
+</body>
+</html>
