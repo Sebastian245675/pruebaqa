@@ -95,8 +95,8 @@ class SeleniumQaFlowTests {
 		type(By.cssSelector("[data-testid='experience-company']"), "Practice Labs");
 		type(By.cssSelector("[data-testid='experience-employment-type']"), "Tiempo completo");
 		type(By.cssSelector("[data-testid='experience-location']"), "Remoto");
-		type(By.cssSelector("[data-testid='experience-start-date']"), "01012026");
-		type(By.cssSelector("[data-testid='experience-end-date']"), "30062026");
+		type(By.cssSelector("[data-testid='experience-start-date']"), "2026-01-01");
+		type(By.cssSelector("[data-testid='experience-end-date']"), "2026-06-30");
 		type(By.cssSelector("[data-testid='experience-description']"), "Alta de experiencia desde Selenium para practicar QA.");
 		click(By.cssSelector("[data-testid='experience-submit']"));
 
@@ -132,13 +132,13 @@ class SeleniumQaFlowTests {
 		registerAndLogin(email, password, fullName);
 
 		// 2. Agregar una experiencia
-		type(By.id("jobTitle"), "Eliminame");
-		type(By.id("company"), "Delete Co");
-		type(By.id("employmentType"), "Temporal");
-		type(By.id("experienceLocation"), "Remoto");
-		type(By.id("startDate"), "01012026");
-		type(By.id("endDate"), "01022026");
-		click(By.id("experience-submit"));
+		type(By.cssSelector("[data-testid='experience-job-title']"), "Eliminame");
+		type(By.cssSelector("[data-testid='experience-company']"), "Delete Co");
+		type(By.cssSelector("[data-testid='experience-employment-type']"), "Temporal");
+		type(By.cssSelector("[data-testid='experience-location']"), "Remoto");
+		type(By.cssSelector("[data-testid='experience-start-date']"), "2026-01-01");
+		type(By.cssSelector("[data-testid='experience-end-date']"), "2026-02-01");
+		click(By.cssSelector("[data-testid='experience-submit']"));
 
 		waitForVisible(By.id("experience-added-alert"));
 		assertTrue(driver.getPageSource().contains("Eliminame"));
@@ -202,10 +202,10 @@ class SeleniumQaFlowTests {
 		type(By.id("experienceLocation"), "Office");
 		
 		// Fecha inicio: 2026-05-10, Fecha fin: 2026-04-10 (Error)
-		type(By.id("startDate"), "10052026");
-		type(By.id("endDate"), "10042026");
+		type(By.cssSelector("[data-testid='experience-start-date']"), "2026-05-10");
+		type(By.cssSelector("[data-testid='experience-end-date']"), "2026-04-10");
 		
-		click(By.id("experience-submit"));
+		click(By.cssSelector("[data-testid='experience-submit']"));
 
 		// 3. Verificar mensaje de error
 		WebElement errorMsg = waitForVisible(By.xpath("//p[contains(text(), 'La fecha final no puede ser anterior')]"));
